@@ -119,6 +119,10 @@ class ControllerProtocol(BaseProtocol):
     def error_received(self, exc: Exception) -> None:
         # TODO?
         raise NotImplementedError()
+    
+    def divide_chunks(self,l, n): 
+        for i in range(0, len(l), n):  
+            yield l[i:i + n].upper() 
 
     async def input_report_mode_0x30(self):
         """
@@ -155,7 +159,10 @@ class ControllerProtocol(BaseProtocol):
                         output_report_id = report.get_output_report_id()
 
                         if output_report_id == OutputReportID.RUMBLE_ONLY:
-                            # TODO
+                            datastr = list(self.divide_chunks(data.hex(),2))
+                            print(datastr)
+                            if report.data[4] > 1 or report.data[8] > 1:
+                                print('rumble')
                             pass
                         elif output_report_id == OutputReportID.SUB_COMMAND:
                             reply_send = await self._reply_to_sub_command(report)
@@ -202,8 +209,9 @@ class ControllerProtocol(BaseProtocol):
 
         if output_report_id == OutputReportID.SUB_COMMAND:
             await self._reply_to_sub_command(report)
-        # elif output_report_id == OutputReportID.RUMBLE_ONLY:
-        #    pass
+        elif output_report_id == OutputReportID.RUMBLE_ONLY:
+           print('rumble3')
+           pass
         else:
             logger.warning(f'Output report {output_report_id} not implemented - ignoring')
 
@@ -212,6 +220,7 @@ class ControllerProtocol(BaseProtocol):
         try:
             sub_command = report.get_sub_command()
         except NotImplementedError as err:
+            print('error')
             logger.warning(err)
             return False
 

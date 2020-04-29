@@ -126,8 +126,11 @@ class InputReport:
             return SubCommand(self.data[15])
         except ValueError:
             raise NotImplementedError(f'Sub command id {hex(self.data[11])} not implemented')
+    def sub_0x48_enable_vibration(self):
+        self.reply_to_subcommand_id(0x48)
+        self.data[16] = 0x01
 
-    def sub_0x02_device_info(self, mac, fm_version=(0x04, 0x00), controller=Controller.JOYCON_L):
+    def sub_0x02_device_info(self, mac, fm_version=(0x03, 0x59), controller=Controller.JOYCON_L):
         """
         Sub command 0x02 request device info response.
 
@@ -149,7 +152,10 @@ class InputReport:
         self.data[offset + 3] = 0x02
         self.data[offset + 4: offset + 10] = mac
         self.data[offset + 10] = 0x01
-        self.data[offset + 11] = 0x01
+        if controller == Controller.PRO_CONTROLLER:
+            self.data[offset + 11] = 0x02
+        else:
+            self.data[offset + 11] = 0x01
 
     def sub_0x10_spi_flash_read(self, offset, size, data):
         if len(data) != size:
@@ -248,6 +254,7 @@ class OutputReport:
         self.data[2] = timer % 0x10
 
     def get_rumble_data(self):
+        print('rumble1')
         return self.data[3:11]
 
     def get_sub_command(self):

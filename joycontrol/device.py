@@ -14,7 +14,6 @@ HID_PATH = '/bluez/switch/hid'
 class HidDevice:
     def __init__(self, device_id=None):
         bus = dbus.SystemBus()
-
         # Get Bluetooth adapter from dbus interface
         manager = dbus.Interface(bus.get_object('org.bluez', '/'), 'org.freedesktop.DBus.ObjectManager')
         for path, ifaces in manager.GetManagedObjects().items():
