@@ -282,7 +282,7 @@ class StickState:
         """
         if self._calibration is None:
             raise ValueError('No calibration data available.')
-        self._h_stick = self._calibration.h_center
+        #self._h_stick = self._calibration.h_center
         self._v_stick = self._calibration.v_center + self._calibration.v_max_above_center
 
     def set_down(self):
@@ -291,7 +291,7 @@ class StickState:
         """
         if self._calibration is None:
             raise ValueError('No calibration data available.')
-        self._h_stick = self._calibration.h_center
+        #self._h_stick = self._calibration.h_center
         self._v_stick = self._calibration.v_center - self._calibration.v_max_below_center
 
     def set_left(self):
@@ -301,7 +301,7 @@ class StickState:
         if self._calibration is None:
             raise ValueError('No calibration data available.')
         self._h_stick = self._calibration.h_center - self._calibration.h_max_below_center
-        self._v_stick = self._calibration.v_center
+        #self._v_stick = self._calibration.v_center
 
     def set_right(self):
         """
@@ -310,7 +310,7 @@ class StickState:
         if self._calibration is None:
             raise ValueError('No calibration data available.')
         self._h_stick = self._calibration.h_center + self._calibration.h_max_above_center
-        self._v_stick = self._calibration.v_center
+        #self._v_stick = self._calibration.v_center
 
     def set_calibration(self, calibration):
         self._calibration = calibration

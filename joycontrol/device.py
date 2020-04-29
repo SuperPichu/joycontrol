@@ -17,7 +17,7 @@ class HidDevice:
 
         # Setting up dbus to advertise the service record
         bus = dbus.SystemBus()
-        obj = bus.get_object('org.bluez', '/org/bluez/hci0')
+        obj = bus.get_object('org.bluez', '/org/bluez/hci1')
         self.adapter = dbus.Interface(obj, 'org.bluez.Adapter1')
         self.properties = dbus.Interface(self.adapter, 'org.freedesktop.DBus.Properties')
 
@@ -32,11 +32,11 @@ class HidDevice:
         :param cls: default 0x002508 (Gamepad/joystick device class)
         """
         logger.info(f'setting device class to {cls}...')
-        await utils.run_system_command(f'hciconfig hci0 class {cls}')
+        await utils.run_system_command(f'hciconfig hci1 class {cls}')
 
     async def set_name(self, name: str):
         logger.info(f'setting device name to {name}...')
-        await utils.run_system_command(f'hciconfig hci0 name "{name}"')
+        await utils.run_system_command(f'hciconfig hci1 name "{name}"')
 
     def register_sdp_record(self, record_path):
         with open(record_path) as record:
